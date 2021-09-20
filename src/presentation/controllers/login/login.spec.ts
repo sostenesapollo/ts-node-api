@@ -17,7 +17,7 @@ const makeEmailValidator = (): EmailValidator => {
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
     async auth (email: string, password: string): Promise<string> {
-      return await new Promise(resolve => resolve('any_token'))
+      return 'any_token'
     }
   }
   return new AuthenticationStub()
@@ -105,5 +105,12 @@ describe('Login Controller', () => {
     jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(new Promise(resolve => resolve(null)))
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(unauthorized())
+  })
+
+  test('Should return 500 if authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
