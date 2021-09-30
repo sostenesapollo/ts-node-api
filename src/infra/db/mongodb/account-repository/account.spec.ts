@@ -1,6 +1,6 @@
 import { AccountMongoRepository } from './account'
 import { MongoHelper } from '../helpers/mongo-helper'
-import { Collection } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 
 let accountCollection: Collection
 
@@ -14,7 +14,7 @@ describe('Account Mongo Repository', () => {
   })
 
   beforeEach(async () => {
-    accountCollection = MongoHelper.getCollection('accounts')
+    accountCollection = await MongoHelper.getCollection('accounts')
     await accountCollection.deleteMany({})
   })
 
@@ -55,5 +55,25 @@ describe('Account Mongo Repository', () => {
     const sut = makeSut()
     const account = await sut.loadByEmail('any_email@mail.com')
     expect(account).toBeFalsy()
+  })
+
+  test('Should update the account accessToken on updateAccessToken success', async () => {
+    const sut = makeSut()
+    const inserted = await accountCollection.insertOne({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
+
+    const insertedRecordId = inserted.insertedId
+    await sut.updateAccessToken(insertedRecordId.toHexString(), 'any_token')
+    const res: any = await accountCollection.findOne({ _id: new ObjectId(insertedRecordId) })
+    const account = MongoHelper.map(res)
+    expect(inserted).toBeTruthy()
+    expect(account.id).toBeTruthy()
+    expect(account.name).toBe('any_name')
+    expect(account.accessToken).toBe('any_token')
+    expect(account.email).toBe('any_email@mail.com')
+    expect(account.password).toBe('any_password')
   })
 })
