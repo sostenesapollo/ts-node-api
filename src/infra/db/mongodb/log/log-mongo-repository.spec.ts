@@ -1,16 +1,16 @@
-import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
+import { Collection } from 'mongodb'
 import { LogMongoRepository } from './log-mongo-repository'
 
 const makeSut = (): LogMongoRepository => {
   return new LogMongoRepository()
 }
 
-describe('Account Mongo Repository', () => {
+describe('Log Mongo Repository', () => {
   let errorCollection: Collection
 
   beforeAll(async () => {
-    await MongoHelper.connect(process.env.MONGO_URL ?? '')
+    await MongoHelper.connect(process.env.MONGO_URL)
   })
 
   afterAll(async () => {
@@ -18,11 +18,11 @@ describe('Account Mongo Repository', () => {
   })
 
   beforeEach(async () => {
-    errorCollection = MongoHelper.getCollection('errors')
+    errorCollection = await MongoHelper.getCollection('errors')
     await errorCollection.deleteMany({})
   })
 
-  test('Should create an error log on success ', async () => {
+  test('Should create an error log on success', async () => {
     const sut = makeSut()
     await sut.logError('any_error')
     const count = await errorCollection.countDocuments()

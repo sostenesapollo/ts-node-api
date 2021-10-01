@@ -6,7 +6,7 @@ const makeSut = (): CompareFieldsValidation => {
 }
 
 describe('CompareFields Validation', () => {
-  test('Should return an InvalidParamError if validation fails', () => {
+  test('Should return a InvalidParamError if validation fails', () => {
     const sut = makeSut()
     const error = sut.validate({
       field: 'any_value',
