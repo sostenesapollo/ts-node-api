@@ -36,6 +36,6 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
       accessToken: token,
       role
     })
-    return MongoHelper.map(result)
+    return result && MongoHelper.map(result)
   }
 }
