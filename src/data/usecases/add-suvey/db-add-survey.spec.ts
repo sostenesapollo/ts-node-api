@@ -39,7 +39,7 @@ describe('DbAddSurvey UseCase', () => {
     MockDate.set(new Date())
   })
 
-  afterAll(() => {
+  beforeAll(() => {
     MockDate.reset()
   })
 
