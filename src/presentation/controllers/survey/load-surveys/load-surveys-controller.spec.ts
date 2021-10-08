@@ -2,7 +2,7 @@ import { LoadSurveysController } from './load-surveys-controller'
 import { LoadSurveys } from '../../../../domain/usecases/load-surveys'
 import { Survey } from '../../../../domain/models/survey'
 import MockDate from 'mockdate'
-import { ok } from '../../../middlewares/auth-middleware-protocols'
+import { ok, serverError } from '../../../middlewares/auth-middleware-protocols'
 
 const makeFakeSurveys = (): Survey[] => {
   return [
@@ -74,5 +74,12 @@ describe('LoadSurveys Controller', () => {
     const { sut } = makeSut()
     const httpReponse = await sut.handle({})
     expect(httpReponse).toEqual(ok(makeFakeSurveys()))
+  })
+
+  test('Should throw if Hasher throws', async () => {
+    const { sut, loadSurveysStub } = makeSut()
+    jest.spyOn(loadSurveysStub, 'load').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
