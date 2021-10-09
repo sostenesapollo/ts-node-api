@@ -7,5 +7,19 @@
         "remoteRoot": "/usr/src/clean-node-api",
         "port": 9222,
         "restart": true
-    }]
+    },
+    {
+        "name": "Jest Debuggerr",
+        "type": "node",
+        "request": "launch",
+        "runtimeArgs": [
+          "--inspect-brk",
+          "${workspaceRoot}/node_modules/.bin/jest",
+          "--runInBand"
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "port": 9229
+      }
+    ] 
 }
