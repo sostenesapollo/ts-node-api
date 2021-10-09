@@ -60,7 +60,7 @@ describe('Survey Routes', () => {
         .expect(403)
     })
 
-    test('Should return 200 on AddSurvey if valid accessToken', async () => {
+    test('Should return 403 on AddSurvey if valid accessToken', async () => {
       const password = await hash('default_password', 12)
       const res = await accountCollection.insertOne({
         name: 'User',
@@ -90,7 +90,7 @@ describe('Survey Routes', () => {
             answer: 'Answer 2'
           }]
         })
-        .expect(200)
+        .expect(204)
     })
   })
 
