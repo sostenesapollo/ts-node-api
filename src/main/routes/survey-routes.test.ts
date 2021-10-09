@@ -101,7 +101,7 @@ describe('Survey Routes', () => {
         .expect(403)
     })
 
-    test('Should return 204 on load surveys with valid accessToken', async () => {
+    test('Should return 200 on load surveys with valid accessToken', async () => {
       const accessToken = await makeAccessToken()
 
       await surveyCollection.insertMany([{
