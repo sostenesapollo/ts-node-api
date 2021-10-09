@@ -1,10 +1,10 @@
 import { LoadSurveysController } from './load-surveys-controller'
 import { LoadSurveys } from '../../../../domain/usecases/load-surveys'
-import { Survey } from '../../../../domain/models/survey'
+import { SurveyModel } from '../../../../domain/models/survey'
 import MockDate from 'mockdate'
 import { noContent, ok, serverError } from '../../../middlewares/auth-middleware-protocols'
 
-const makeFakeSurveys = (): Survey[] => {
+const makeFakeSurveys = (): SurveyModel[] => {
   return [
     {
       id: 'any_id',
@@ -33,7 +33,7 @@ const makeFakeSurveys = (): Survey[] => {
 
 const makeLoadSurveys = (): LoadSurveys => {
   class LoadSurveysStub implements LoadSurveys {
-    async load (): Promise<Survey[]> {
+    async load (): Promise<SurveyModel[]> {
       return new Promise(resolve => resolve(makeFakeSurveys()))
     }
   }
