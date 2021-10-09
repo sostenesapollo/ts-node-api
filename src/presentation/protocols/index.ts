@@ -1,3 +1,3 @@
 export * from './controller'
 export * from './http'
-export * from '../protocols/middleware'
+export * from '@/presentation/protocols/middleware'

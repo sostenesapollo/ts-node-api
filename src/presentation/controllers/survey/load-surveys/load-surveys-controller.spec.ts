@@ -1,8 +1,8 @@
 import { LoadSurveysController } from './load-surveys-controller'
-import { LoadSurveys } from '../../../../domain/usecases/load-surveys'
-import { SurveyModel } from '../../../../domain/models/survey'
+import { LoadSurveys } from '@/domain/usecases/load-surveys'
+import { SurveyModel } from '@/domain/models/survey'
+import { noContent, ok, serverError } from '@/presentation/middlewares/auth-middleware-protocols'
 import MockDate from 'mockdate'
-import { noContent, ok, serverError } from '../../../middlewares/auth-middleware-protocols'
 
 const makeFakeSurveys = (): SurveyModel[] => {
   return [

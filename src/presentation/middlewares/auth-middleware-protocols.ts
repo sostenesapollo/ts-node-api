@@ -1,2 +1,2 @@
-export * from '../helpers/http/http-helper'
-export * from '../protocols'
+export * from '@/presentation/helpers/http/http-helper'
+export * from '@/presentation/protocols'
