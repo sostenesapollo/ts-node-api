@@ -1,6 +1,6 @@
 import { HttpRequest, HttpResponse } from './load-surveys-controller-protocols'
 import { Controller } from '@/presentation/protocols/controller'
-import { LoadSurveys } from '@/domain/usecases/load-surveys'
+import { LoadSurveys } from '@/domain/usecases/survey/load-surveys'
 import { noContent, ok, serverError } from '@/presentation/middlewares/auth-middleware-protocols'
 export class LoadSurveysController implements Controller {
   constructor (
