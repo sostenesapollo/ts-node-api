@@ -4,6 +4,9 @@ import { HttpRequest, LoadSurveyById, SurveyModel, forbiden, InvalidParamError, 
 const makeFakeRequest = (): HttpRequest => ({
   params: {
     surveyId: 'any_survey_id'
+  },
+  body: {
+    answer: 'any_answer'
   }
 })
 
@@ -64,5 +67,18 @@ describe('SaveSurveyResult Controller', () => {
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new ServerError(null)))
+  })
+
+  test('Should returns 403 if an invalid answer is provided', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle({
+      body: {
+        answer: 'wrong_answer'
+      },
+      params: {
+        surveyId: 'any_survey_id'
+      }
+    })
+    expect(httpResponse).toEqual(forbiden(new InvalidParamError('answer')))
   })
 })
