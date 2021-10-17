@@ -1,5 +1,5 @@
-import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account-mongo-repository'
+import { MongoHelper } from '../helpers/mongo-helper'
 import { Collection } from 'mongodb'
 
 let accountCollection: Collection
@@ -21,6 +21,7 @@ describe('Account Mongo Repository', () => {
   const makeSut = (): AccountMongoRepository => {
     return new AccountMongoRepository()
   }
+
   describe('add()', () => {
     test('Should return an account on add success', async () => {
       const sut = makeSut()
@@ -94,16 +95,16 @@ describe('Account Mongo Repository', () => {
       expect(account.password).toBe('any_password')
     })
 
-    test('Should return an account on loadByToken with role ', async () => {
+    test('Should return an account on loadByToken with admin role', async () => {
       const sut = makeSut()
       await accountCollection.insertOne({
         name: 'any_name',
         email: 'any_email@mail.com',
         password: 'any_password',
         accessToken: 'any_token',
-        role: 'any_role'
+        role: 'admin'
       })
-      const account = await sut.loadByToken('any_token', 'any_role')
+      const account = await sut.loadByToken('any_token', 'admin')
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
       expect(account.name).toBe('any_name')
@@ -111,7 +112,7 @@ describe('Account Mongo Repository', () => {
       expect(account.password).toBe('any_password')
     })
 
-    test('Should return null on loadByToken with invalid role ', async () => {
+    test('Should return null on loadByToken with invalid role', async () => {
       const sut = makeSut()
       await accountCollection.insertOne({
         name: 'any_name',
@@ -123,7 +124,7 @@ describe('Account Mongo Repository', () => {
       expect(account).toBeFalsy()
     })
 
-    test('Should return an account on loadByToken with if user is admin ', async () => {
+    test('Should return an account on loadByToken with if user is admin', async () => {
       const sut = makeSut()
       await accountCollection.insertOne({
         name: 'any_name',

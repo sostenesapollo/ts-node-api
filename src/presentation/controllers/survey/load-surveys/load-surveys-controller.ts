@@ -1,11 +1,8 @@
-import { HttpRequest, HttpResponse } from './load-surveys-controller-protocols'
-import { Controller } from '@/presentation/protocols/controller'
-import { LoadSurveys } from '@/domain/usecases/survey/load-surveys'
-import { noContent, ok, serverError } from '@/presentation/middlewares/auth-middleware-protocols'
+import { Controller, HttpRequest, HttpResponse, LoadSurveys } from './load-surveys-controller-protocols'
+import { ok, serverError, noContent } from '@/presentation/helpers/http/http-helper'
+
 export class LoadSurveysController implements Controller {
-  constructor (
-    private readonly loadSurveys: LoadSurveys
-  ) {}
+  constructor (private readonly loadSurveys: LoadSurveys) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {

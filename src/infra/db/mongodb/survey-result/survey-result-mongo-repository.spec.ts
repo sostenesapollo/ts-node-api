@@ -1,8 +1,8 @@
 import { SurveyResultMongoRepository } from './survey-result-mongo-repository'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { Collection } from 'mongodb'
-import { AccountModel } from '@/domain/models/account'
 import { SurveyModel } from '@/domain/models/survey'
+import { AccountModel } from '@/domain/models/account'
 
 let surveyCollection: Collection
 let surveyResultCollection: Collection
@@ -15,15 +15,12 @@ const makeSut = (): SurveyResultMongoRepository => {
 const makeSurvey = async (): Promise<SurveyModel> => {
   const res = await surveyCollection.insertOne({
     question: 'any_question',
-    answers: [
-      {
-        image: 'any_image',
-        answer: 'any_answer'
-      },
-      {
-        answer: 'other_answer'
-      }
-    ],
+    answers: [{
+      image: 'any_image',
+      answer: 'any_answer'
+    }, {
+      answer: 'other_answer'
+    }],
     date: new Date()
   })
   return res.ops[0]
@@ -56,11 +53,11 @@ describe('Survey Mongo Repository', () => {
     await accountCollection.deleteMany({})
   })
 
-  describe('add()', () => {
+  describe('save()', () => {
     test('Should add a survey result if its new', async () => {
-      const sut = makeSut()
       const survey = await makeSurvey()
       const account = await makeAccount()
+      const sut = makeSut()
       const surveyResult = await sut.save({
         surveyId: survey.id,
         accountId: account.id,
@@ -72,8 +69,7 @@ describe('Survey Mongo Repository', () => {
       expect(surveyResult.answer).toBe(survey.answers[0].answer)
     })
 
-    test('Should update  survey result if its not new', async () => {
-      const sut = makeSut()
+    test('Should update survey result if its not new', async () => {
       const survey = await makeSurvey()
       const account = await makeAccount()
       const res = await surveyResultCollection.insertOne({
@@ -82,6 +78,7 @@ describe('Survey Mongo Repository', () => {
         answer: survey.answers[0].answer,
         date: new Date()
       })
+      const sut = makeSut()
       const surveyResult = await sut.save({
         surveyId: survey.id,
         accountId: account.id,

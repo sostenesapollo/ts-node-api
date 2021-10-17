@@ -1,8 +1,8 @@
 import { SignUpController } from './signup-controller'
 import { AccountModel, AddAccount, AddAccountModel, Validation, Authentication, AuthenticationModel } from './signup-controller-protocols'
+import { MissingParamError, ServerError, EmailInUseError } from '@/presentation/errors'
 import { HttpRequest } from '@/presentation/protocols'
-import { EmailInUseError, MissingParamError, ServerError } from '@/presentation/errors'
-import { ok, serverError, badRequest, forbiden } from '@/presentation/helpers/http/http-helper'
+import { ok, serverError, badRequest, forbidden } from '@/presentation/helpers/http/http-helper'
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
@@ -11,6 +11,15 @@ const makeAddAccount = (): AddAccount => {
     }
   }
   return new AddAccountStub()
+}
+
+const makeAuthentication = (): Authentication => {
+  class AuthenticationStub implements Authentication {
+    async auth (authentication: AuthenticationModel): Promise<string> {
+      return new Promise(resolve => resolve('any_token'))
+    }
+  }
+  return new AuthenticationStub()
 }
 
 const makeValidation = (): Validation => {
@@ -37,15 +46,6 @@ const makeFakeRequest = (): HttpRequest => ({
     passwordConfirmation: 'any_password'
   }
 })
-
-const makeAuthentication = (): Authentication => {
-  class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationModel): Promise<string> {
-      return new Promise(resolve => resolve('any_token'))
-    }
-  }
-  return new AuthenticationStub()
-}
 
 interface SutTypes {
   sut: SignUpController
@@ -92,7 +92,7 @@ describe('SignUp Controller', () => {
     const { sut, addAccountStub } = makeSut()
     jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(new Promise(resolve => resolve(null)))
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(forbiden(new EmailInUseError()))
+    expect(httpResponse).toEqual(forbidden(new EmailInUseError()))
   })
 
   test('Should return 200 if valid data is provided', async () => {

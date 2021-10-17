@@ -1,5 +1,5 @@
-import bcrypt from 'bcrypt'
 import { BcryptAdapter } from './bcrypt-adapter'
+import bcrypt from 'bcrypt'
 
 jest.mock('bcrypt', () => ({
   async hash (): Promise<string> {
@@ -38,6 +38,7 @@ describe('Bcrypt Adapter', () => {
       await expect(promise).rejects.toThrow()
     })
   })
+
   describe('compare()', () => {
     test('Should call compare with correct values', async () => {
       const sut = makeSut()

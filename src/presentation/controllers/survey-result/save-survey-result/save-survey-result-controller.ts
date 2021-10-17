@@ -1,5 +1,6 @@
-import { forbiden, ok, serverError } from '@/presentation/middlewares/auth-middleware-protocols'
-import { Controller, HttpRequest, HttpResponse, LoadSurveyById, InvalidParamError, SaveSurveyResult } from './save-survey-result-controller-protocols'
+import { Controller, HttpRequest, HttpResponse, LoadSurveyById, SaveSurveyResult } from './save-survey-result-controller-protocols'
+import { forbidden, serverError, ok } from '@/presentation/helpers/http/http-helper'
+import { InvalidParamError } from '@/presentation/errors'
 
 export class SaveSurveyResultController implements Controller {
   constructor (
@@ -16,18 +17,18 @@ export class SaveSurveyResultController implements Controller {
       if (survey) {
         const answers = survey.answers.map(a => a.answer)
         if (!answers.includes(answer)) {
-          return forbiden(new InvalidParamError('answer'))
+          return forbidden(new InvalidParamError('answer'))
         }
       } else {
-        return forbiden(new InvalidParamError('surveyId'))
+        return forbidden(new InvalidParamError('surveyId'))
       }
-      const surveyReult = await this.saveSurveyResult.save({
+      const surveyResult = await this.saveSurveyResult.save({
         accountId,
         surveyId,
         answer,
         date: new Date()
       })
-      return ok(surveyReult)
+      return ok(surveyResult)
     } catch (error) {
       return serverError(error)
     }
